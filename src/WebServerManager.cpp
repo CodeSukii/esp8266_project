@@ -4,10 +4,15 @@
 
 #include "WebServerManager.h"
 #include "TemperatureSensor.h"
+#include <ESPAsyncWebServer.h>
 
 WebServerManager::WebServerManager() : server(80), tempSensor(nullptr) {}
 
 void WebServerManager::begin() {
+    // CORS configuration
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+
     // Serve static files from SPIFFS
     if (!SPIFFS.begin()) {
         Serial.println("Failed to mount file system");
@@ -27,6 +32,7 @@ void WebServerManager::begin() {
         this->handleNotFound(request);
     });
 
+    // Start server
     server.begin();
     Serial.println("HTTP server started");
 }
@@ -46,6 +52,7 @@ void WebServerManager::handleData(AsyncWebServerRequest *request) {
     if (tempSensor) {
         float temperature = tempSensor->getTemperature();
         float humidity = tempSensor->getHumidity();
+
         String response = "{ \"temperature\": " + String(temperature) + ", \"humidity\": " + String(humidity) + " }";
         request->send(200, "application/json", response);
     } else {

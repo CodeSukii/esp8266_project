@@ -3,29 +3,65 @@
 <head>
     <title>ESP8266 Weather Station</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="5">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
             margin-top: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 24px;
+        }
+
+        .temperature, .humidity {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .temperature i, .humidity i {
+            font-size: 24px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .temperature span, .humidity span {
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>ESP8266 Weather Station</h1>
-    <p>Temperature: <span id="temperature"></span> °C</p>
-    <p>Humidity: <span id="humidity"></span> %</p>
+    <div class="temperature">
+        <i class="fas fa-thermometer-half"></i> Temperature: <span id="temperature"></span> °C
+    </div>
+    <div class="humidity">
+        <i class="fas fa-tint"></i> Humidity: <span id="humidity"></span> %
+    </div>
 </div>
+
+<!-- Font Awesome CDN for icons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" integrity="sha512-g2ABykpS2l29+K2Cw/0D0XW+5B36vXZpSKqJq2lQ8ImaIv8Whe8FATz9PQw4D/9N0XJq4UzWBGpYwDvVcofW4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     // Function to fetch data from the URL and update the HTML elements
     function fetchDataAndUpdate() {
-        // Replace with your URL
         const url = 'http://10.65.0.27/data';
 
         // Fetch data from the URL
@@ -50,8 +86,11 @@
             });
     }
 
-    // Call the function to fetch data and update on page load
+    // Call fetchDataAndUpdate initially
     fetchDataAndUpdate();
+
+    // Periodically update data every 5 seconds (5000 ms)
+    setInterval(fetchDataAndUpdate, 5000); // Adjust interval as needed
 </script>
 </body>
 </html>
